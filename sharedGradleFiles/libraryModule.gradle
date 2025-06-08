@@ -1,0 +1,17 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.jetbrains.kotlin.android'
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.google.devtools.ksp'
+
+apply from: "$rootDir/sharedGradleFiles/androidShared.gradle"
+
+dependencies {
+    // Dagger
+    implementation libs.hilt.android
+    ksp libs.hilt.android.compiler
+
+    // Androidx
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.core.ktx)
+
+}

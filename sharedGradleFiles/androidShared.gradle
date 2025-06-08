@@ -1,0 +1,20 @@
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdk = Versions.COMPILE_SDK
+
+    defaultConfig {
+        minSdk = Versions.SDK_MIN
+        targetSdk = Versions.TARGET_SDK
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility = Versions.javaVersion
+        targetCompatibility = Versions.javaVersion
+    }
+    kotlinOptions {
+        jvmTarget = Versions.JVM_TARGET
+    }
+}
