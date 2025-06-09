@@ -34,8 +34,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature-initial-screen"))
+    implementation(project(":feature-game-setup-screen"))
     implementation(project(":feature-game-screen"))
+    implementation(project(":foundation-ui"))
 
     implementation(libs.activity.compose)
     implementation(libs.navigation.compose)

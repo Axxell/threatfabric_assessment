@@ -4,9 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.theatfabric.wordsperminute.feature.gamescreen.GameScreen
-import com.theatfabric.wordsperminute.feature.initialscreen.InitialScreen
+import com.theatfabric.wordsperminute.feature.initialscreen.GameSetupScreen
 
 @Composable
 fun ApplicationNavHost(
@@ -14,7 +13,7 @@ fun ApplicationNavHost(
 ) {
     NavHost(navController, startDestination = StartScreenRoute) {
         composable<StartScreenRoute> {
-            InitialScreen(
+            GameSetupScreen(
                 onNavigateToGameScreen = { userName, gameId ->
                     navController.navigate(
                         GameScreenRoute(

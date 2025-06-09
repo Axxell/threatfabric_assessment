@@ -23,5 +23,6 @@ rootProject.name = "WordsPerMinute"
 include(":app")
 include(":domain-data-typespeed")
 include(":feature-component-wordsperminute")
-include(":feature-initial-screen")
+include(":feature-game-setup-screen")
 include(":feature-game-screen")
+include(":foundation-ui")

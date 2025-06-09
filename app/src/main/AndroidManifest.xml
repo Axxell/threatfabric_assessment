@@ -5,6 +5,7 @@
         android:name=".application.TypeSpeedApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:theme="@android:style/Theme.Material.NoActionBar"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
         <activity

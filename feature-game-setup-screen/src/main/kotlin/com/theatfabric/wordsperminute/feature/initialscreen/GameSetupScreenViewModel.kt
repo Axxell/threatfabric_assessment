@@ -13,7 +13,7 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class InitialScreenViewModel @Inject constructor() : ViewModel() {
+class GameSetupScreenViewModel @Inject constructor() : ViewModel() {
     var userName by mutableStateOf("")
     var gameId by mutableStateOf("")
 

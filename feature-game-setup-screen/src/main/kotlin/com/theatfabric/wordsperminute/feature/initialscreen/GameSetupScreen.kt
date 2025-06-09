@@ -1,6 +1,5 @@
 package com.theatfabric.wordsperminute.feature.initialscreen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,11 +19,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InitialScreen(
-    onNavigateToGameScreen: (String, String) -> Unit
+fun GameSetupScreen(
+    onNavigateToGameScreen: (String, String) -> Unit,
+    viewModel: GameSetupScreenViewModel = hiltViewModel()
 ) {
-    val viewModel = hiltViewModel<InitialScreenViewModel>()
-
     LaunchedEffect(Unit) {
         viewModel.navigationFlow.collect { userName ->
             onNavigateToGameScreen(
@@ -36,7 +34,9 @@ fun InitialScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("TypeSpeed Game") })
+            TopAppBar(
+                title = { Text("TypeSpeed Game") }
+            )
         },
         content = { padding ->
             Column(
@@ -44,14 +44,13 @@ fun InitialScreen(
                     .padding(padding)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
             ) {
                 OutlinedTextField(
                     modifier = Modifier.padding(16.dp)
                         .fillMaxWidth(),
                     value = viewModel.userName,
                     onValueChange = { viewModel.userName = it },
-                    label = { Text("UserName:") }
+                    label = { Text("Username") }
                 )
                 Button(
                     modifier = Modifier.padding(horizontal = 16.dp)
