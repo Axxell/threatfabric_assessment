@@ -3,18 +3,14 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
+apply(from = "$rootDir/sharedGradleFiles/androidShared.gradle")
+apply(from = "$rootDir/sharedGradleFiles/hiltDependencies.gradle")
+
 android {
     namespace = "com.theatfabric.wordsperminute"
-    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.theatfabric.wordsperminute"
-        minSdk = 24
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {

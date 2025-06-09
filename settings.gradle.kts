@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "WordsPerMinute"
 include(":app")
-include(":domain-data-keystrokes")
+include(":domain-data-typespeed")

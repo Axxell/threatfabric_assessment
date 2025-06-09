@@ -1,0 +1,8 @@
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'com.google.devtools.ksp'
+
+dependencies {
+    // Dagger
+    implementation libs.hilt.android
+    ksp libs.hilt.android.compiler
+}
