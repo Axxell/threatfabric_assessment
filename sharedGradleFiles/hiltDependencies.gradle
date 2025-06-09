@@ -4,5 +4,6 @@ apply plugin: 'com.google.devtools.ksp'
 dependencies {
     // Dagger
     implementation libs.hilt.android
+    implementation libs.hilt.navigation.compose
     ksp libs.hilt.android.compiler
 }

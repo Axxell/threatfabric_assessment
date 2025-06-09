@@ -1,10 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 apply(from = "$rootDir/sharedGradleFiles/androidShared.gradle")
 apply(from = "$rootDir/sharedGradleFiles/hiltDependencies.gradle")
+apply(from = "$rootDir/sharedGradleFiles/composeDependencies.gradle")
 
 android {
     namespace = "com.theatfabric.wordsperminute"
@@ -32,11 +34,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature-initial-screen"))
+    implementation(project(":feature-game-screen"))
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.activity.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 }

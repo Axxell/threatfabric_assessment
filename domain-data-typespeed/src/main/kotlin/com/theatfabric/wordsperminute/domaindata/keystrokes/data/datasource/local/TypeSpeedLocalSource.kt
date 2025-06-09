@@ -1,33 +1,40 @@
 package com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local
 
 import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.TypeSpeedSource
-import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.database.TypeSpeedDatabase
+import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.dao.KeystrokeDao
 import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.dto.KeystrokeDto
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class TypeSpeedLocalSource @Inject constructor(
-    typeSpeedDatabase: TypeSpeedDatabase
+    val keystrokeDao: KeystrokeDao
 ) : TypeSpeedSource {
 
-    private val keystrokeDao = typeSpeedDatabase.keystrokeDao()
-
-    override fun addKeystroke(keystroke: KeystrokeDto) {
+    override suspend fun addKeystroke(keystroke: KeystrokeDto) {
         keystrokeDao.addKeystroke(keystroke)
     }
 
-    override fun getAllKeystrokes(): List<KeystrokeDto> {
+    override suspend fun getAllKeystrokes(): List<KeystrokeDto> {
         return keystrokeDao.getAll()
     }
 
-    override fun getGameKeystrokes(gameId: String): List<KeystrokeDto> {
+    override fun observeAllKeystrokes(): Flow<List<KeystrokeDto>> {
+        return keystrokeDao.observeAll()
+    }
+
+    override suspend fun getGameKeystrokes(gameId: String): List<KeystrokeDto> {
         return keystrokeDao.getGameKeystrokes(gameId)
     }
 
-    override fun deleteKeystrokesForGame(gameId: String) {
+    override fun observeGameKeystrokes(gameId: String): Flow<List<KeystrokeDto>> {
+        return keystrokeDao.observeGameKeystrokes(gameId)
+    }
+
+    override suspend fun deleteKeystrokesForGame(gameId: String) {
         keystrokeDao.deleteGameKeystrokes(gameId)
     }
 
-    override fun deleteAllKeystrokes() {
+    override suspend fun deleteAllKeystrokes() {
         keystrokeDao.deleteAll()
     }
 }

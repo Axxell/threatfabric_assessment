@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "keystrokes")
 internal data class KeystrokeDto(
-    @PrimaryKey val id: Int,
     @ColumnInfo(name = "game_id") val gameId: String,
     @ColumnInfo(name = "key_pressed") val keyPressed: Long,
     @ColumnInfo(name = "key_released") val keyReleased: Long,
@@ -14,7 +13,11 @@ internal data class KeystrokeDto(
     @ColumnInfo(name = "is_correct") val isCorrect: Boolean,
     @ColumnInfo(name = "phone_orientation") val phoneOrientation: PhoneOrientationDto,
     @ColumnInfo(name = "user_name") val userName: String
-)
+) {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Int = 0
+}
 
 enum class PhoneOrientationDto {
     PORTRAIT,

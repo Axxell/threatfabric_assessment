@@ -1,0 +1,24 @@
+apply plugin: 'dagger.hilt.android.plugin'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+
+android {
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Versions.COMPOSE_COMPILER
+    }
+}
+
+dependencies {
+    // Compose
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.ui
+    implementation libs.androidx.compose.material3
+    implementation libs.androidx.compose.tooling
+    implementation libs.androidx.compose.preview
+
+    // Lifecycle utils
+    implementation libs.lifecycle.runtime.ktx
+}

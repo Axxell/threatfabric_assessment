@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.TypeSpeedSource
 import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.TypeSpeedLocalSource
+import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.dao.KeystrokeDao
 import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.database.TypeSpeedDatabase
 import dagger.Binds
 import dagger.Module
@@ -25,6 +26,7 @@ internal interface TypeSpeedDomainModule {
 
 
     companion object {
+
         @Provides
         @Singleton
         fun provideTypeSpeedDatabase(
@@ -35,6 +37,14 @@ internal interface TypeSpeedDomainModule {
                 TypeSpeedDatabase::class.java,
                 "typespeed_database"
             ).build()
+        }
+
+        @Provides
+        @Singleton
+        fun provideKeystrokeDao(
+            database: TypeSpeedDatabase
+        ): KeystrokeDao {
+            return database.keystrokeDao()
         }
     }
 
