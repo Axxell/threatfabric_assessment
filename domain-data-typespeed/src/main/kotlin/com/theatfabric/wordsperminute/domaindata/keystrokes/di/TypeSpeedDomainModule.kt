@@ -6,6 +6,8 @@ import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.Type
 import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.TypeSpeedLocalSource
 import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.dao.KeystrokeDao
 import com.theatfabric.wordsperminute.domaindata.keystrokes.data.datasource.local.database.TypeSpeedDatabase
+import com.theatfabric.wordsperminute.domaindata.keystrokes.data.repository.TypeSpeedRepositoryImpl
+import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.repository.TypeSpeedRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -24,6 +26,11 @@ internal interface TypeSpeedDomainModule {
         typeSpeedLocalSource: TypeSpeedLocalSource
     ): TypeSpeedSource
 
+    @Binds
+    @Singleton
+    fun bindTypeSpeedRepository(
+        typeSpeedRepositoryImpl: TypeSpeedRepositoryImpl
+    ): TypeSpeedRepository
 
     companion object {
 

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 internal class TypeSpeedLocalSource @Inject constructor(
-    val keystrokeDao: KeystrokeDao
+    private val keystrokeDao: KeystrokeDao
 ) : TypeSpeedSource {
 
     override suspend fun addKeystroke(keystroke: KeystrokeDto) {
