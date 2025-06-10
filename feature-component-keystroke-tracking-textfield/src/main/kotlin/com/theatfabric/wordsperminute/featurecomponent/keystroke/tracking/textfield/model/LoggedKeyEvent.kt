@@ -5,5 +5,6 @@ data class LoggedKeyEvent(
     val keyCode: Int,
     val keyPressedMillis: Long,
     val keyReleasedMillis: Long,
-    val isCorrect: Boolean
+    val isCorrect: Boolean,
+    val isSeparator: Boolean
 )

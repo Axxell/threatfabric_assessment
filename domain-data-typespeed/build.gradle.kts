@@ -10,6 +10,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":foundation-coroutines"))
+    implementation(project(":foundation-strings"))
+
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
 }

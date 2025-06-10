@@ -28,6 +28,7 @@ internal class TypeSpeedRepositoryImpl @Inject constructor(
         return typeSpeedSource.observeGameKeystrokes(gameId)
             .map { keystrokes ->
                 keystrokes.map { keystrokeDtoToModelMapper(it) }
+                    .sortedBy { it.keyPressedMillis }
             }
     }
 

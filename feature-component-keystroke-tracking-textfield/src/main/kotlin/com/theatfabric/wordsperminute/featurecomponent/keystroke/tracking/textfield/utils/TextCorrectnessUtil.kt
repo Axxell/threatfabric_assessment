@@ -17,8 +17,8 @@ object TextCorrectnessUtil {
         return lastEnteredChar == relatedCorrectChar
     }
 
-    fun shouldAcceptTheNewText(newText: String, oldText: String): Boolean {
-        return newText.length == oldText.length + 1
+    fun shouldAcceptTheNewText(typedText: String, referenceText: String): Boolean {
+        return typedText.length <= referenceText.length
     }
 
 }

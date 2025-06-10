@@ -25,7 +25,11 @@ fun ApplicationNavHost(
             )
         }
         composable<GameScreenRoute> {
-            GameScreen()
+            GameScreen(
+                onGameFinished = {
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }

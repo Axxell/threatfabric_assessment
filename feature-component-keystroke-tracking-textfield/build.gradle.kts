@@ -10,4 +10,7 @@ android {
     namespace = "com.theatfabric.wordsperminute.featurecomponent.keystroke.tracking.textfield"
 }
 
-dependencies {}
+dependencies {
+    implementation(project(":domain-data-typespeed"))
+    implementation(project(":foundation-strings"))
+}

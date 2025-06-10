@@ -12,12 +12,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.Keystroke
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.PhoneOrientation
-import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.usecase.ObserveGameKeystrokesUseCase
+import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.GameKeystrokesStateFlowHolder
+import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.ReferenceTextHolder
+import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.WordsPerMinuteForGameStateHolder
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.usecase.SaveKeystrokeUseCase
 import com.theatfabric.wordsperminute.featurecomponent.keystroke.tracking.textfield.model.LoggedKeyEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,30 +31,39 @@ class GameScreenViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     savedStateHandle: SavedStateHandle,
     private val saveKeystrokeUseCase: SaveKeystrokeUseCase,
-    private val observeGameKeystrokesUseCase: ObserveGameKeystrokesUseCase
+    private val gameKeystrokesStateFlowHolder: GameKeystrokesStateFlowHolder,
+    private val referenceTextHolder: ReferenceTextHolder,
+    private val wordsPerMinuteForGameStateHolder: WordsPerMinuteForGameStateHolder
 ) : ViewModel() {
 
     private val userName: String = checkNotNull(savedStateHandle["userName"])
     private val gameId: String = checkNotNull(savedStateHandle["gameId"])
-    private val referenceText = context.getString(R.string.reference_text)
+
+    private val mutableGameIsFinishedSharedFlow = MutableSharedFlow<Boolean>()
+    val gameIsFinishedSharedFlow = mutableGameIsFinishedSharedFlow.asSharedFlow()
 
     private val mutableReferenceTextStateFlow = MutableStateFlow(
         AnnotatedString(
-            text = referenceText
+            text = referenceTextHolder.getReferenceText(gameId)
         )
     )
     val referenceTextStateFlow = mutableReferenceTextStateFlow.asStateFlow()
 
+    val wordsPerMinuteStateFlow = wordsPerMinuteForGameStateHolder.gameIdToWordsPerMinuteStateFlow
+
     init {
         viewModelScope.launch {
-            observeGameKeystrokesUseCase(gameId).collect {
-                processKeystrokes(keystrokes = it)
+            mutableGameIsFinishedSharedFlow.emit(false)
+            gameKeystrokesStateFlowHolder.startNewGame(gameId)
+            gameKeystrokesStateFlowHolder.gameIdToKeystrokesStateFlow.collect { (_, keystrokes) ->
+                processKeystrokes(keystrokes = keystrokes)
             }
         }
     }
 
-    private fun processKeystrokes(keystrokes: List<Keystroke>) {
+    private suspend fun processKeystrokes(keystrokes: List<Keystroke>) {
         val paragraph = referenceTextStateFlow.value.text
+
         val annotatedString = buildAnnotatedString {
             for (i in paragraph.indices) {
                 val paragraphChar = paragraph[i]
@@ -68,7 +81,12 @@ class GameScreenViewModel @Inject constructor(
                 }
             }
         }
+
         mutableReferenceTextStateFlow.value = annotatedString
+
+        if (paragraph.isNotEmpty() && paragraph.length == keystrokes.size) {
+            mutableGameIsFinishedSharedFlow.emit(true)
+        }
     }
 
     fun saveKeystroke(loggedKeyEvent: LoggedKeyEvent) {
@@ -80,6 +98,7 @@ class GameScreenViewModel @Inject constructor(
                     keyReleasedMillis = loggedKeyEvent.keyReleasedMillis,
                     keyCode = loggedKeyEvent.keyCode,
                     isCorrect = loggedKeyEvent.isCorrect,
+                    isSeparator = loggedKeyEvent.isSeparator,
                     phoneOrientation = context.phoneOrientation(),
                     userName = userName
                 )

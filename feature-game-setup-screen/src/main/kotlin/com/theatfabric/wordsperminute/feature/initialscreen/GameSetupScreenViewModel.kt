@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.usecase.DeleteAllKeystrokesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -13,12 +14,20 @@ import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
-class GameSetupScreenViewModel @Inject constructor() : ViewModel() {
+class GameSetupScreenViewModel @Inject constructor(
+    val deleteAllKeystrokesUseCase: DeleteAllKeystrokesUseCase
+) : ViewModel() {
     var userName by mutableStateOf("")
     var gameId by mutableStateOf("")
 
     private val mutableNavigationFlow = MutableSharedFlow<String>()
     val navigationFlow = mutableNavigationFlow.asSharedFlow()
+
+    init {
+        viewModelScope.launch {
+            deleteAllKeystrokesUseCase()
+        }
+    }
 
     fun onStartClicked() {
         if (userName.isNotBlank()) {

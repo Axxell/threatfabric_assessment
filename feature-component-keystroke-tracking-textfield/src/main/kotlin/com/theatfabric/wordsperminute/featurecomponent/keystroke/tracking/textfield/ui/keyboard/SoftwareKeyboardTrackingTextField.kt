@@ -15,14 +15,13 @@ import com.theatfabric.wordsperminute.featurecomponent.keystroke.tracking.textfi
 @Composable
 fun SoftwareKeyboardTrackingTextField(
     modifier: Modifier = Modifier,
-    referenceText: String,
+    gameId: String,
     viewModel: SoftwareKeyboardTrackingTextFieldViewModel = hiltViewModel(),
     onKeyLogged: (LoggedKeyEvent) -> Unit
 ) {
 
     LaunchedEffect(Unit) {
-        viewModel.referenceText.value = referenceText
-
+        viewModel.gameId = gameId
         viewModel.loggedKeyEventFlow.collect {
             onKeyLogged(it)
         }

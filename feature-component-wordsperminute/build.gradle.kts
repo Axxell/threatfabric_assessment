@@ -10,4 +10,6 @@ android {
     namespace = "com.theatfabric.wordsperminute.featurecomponent.wordsperminute"
 }
 
-dependencies {}
+dependencies {
+    implementation(project(":domain-data-typespeed"))
+}

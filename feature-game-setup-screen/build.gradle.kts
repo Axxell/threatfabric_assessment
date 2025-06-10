@@ -11,5 +11,5 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":domain-data-typespeed"))
 }
