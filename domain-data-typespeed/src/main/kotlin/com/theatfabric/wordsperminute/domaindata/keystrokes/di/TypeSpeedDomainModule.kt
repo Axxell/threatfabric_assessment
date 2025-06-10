@@ -10,7 +10,7 @@ import com.theatfabric.wordsperminute.domaindata.keystrokes.data.repository.Type
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.repository.TypeSpeedRepository
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.GameKeystrokesStateFlowHolder
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.ReferenceTextHolder
-import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.WordsPerMinuteForGameStateHolder
+import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.GameWordsPerMinuteStateHolder
 import com.threatfabric.wordsperminute.foundation.coroutines.AppScope
 import dagger.Binds
 import dagger.Module
@@ -74,8 +74,8 @@ internal interface TypeSpeedDomainModule {
             @AppScope appScope: CoroutineScope,
             gameKeystrokesStateFlowHolder: GameKeystrokesStateFlowHolder,
             referenceTextHolder: ReferenceTextHolder
-        ): WordsPerMinuteForGameStateHolder {
-            return WordsPerMinuteForGameStateHolder(appScope, gameKeystrokesStateFlowHolder, referenceTextHolder)
+        ): GameWordsPerMinuteStateHolder {
+            return GameWordsPerMinuteStateHolder(appScope, gameKeystrokesStateFlowHolder, referenceTextHolder)
         }
 
         @Provides

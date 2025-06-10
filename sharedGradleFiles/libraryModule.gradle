@@ -1,8 +1,12 @@
+// These build files are in old Groovy setup because of the problems I encountered with Kotlin DSL
+// When trying to implement the same approach (through Plugins) with Version Controll library
+// Still looking for the right approach
 apply plugin: 'com.android.library'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 apply from: "$rootDir/sharedGradleFiles/androidShared.gradle"
 apply from: "$rootDir/sharedGradleFiles/hiltDependencies.gradle"
+apply from: "$rootDir/sharedGradleFiles/testDependencies.gradle"
 
 dependencies {
     // Androidx

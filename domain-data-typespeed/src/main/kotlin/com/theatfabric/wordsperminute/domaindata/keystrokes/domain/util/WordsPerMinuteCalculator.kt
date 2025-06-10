@@ -1,40 +1,18 @@
-package com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder
+package com.theatfabric.wordsperminute.domaindata.keystrokes.domain.util
 
 import androidx.annotation.VisibleForTesting
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.Keystroke
 import com.theatfabric.wordsperminute.foundation.strings.splitIntoWords
-import com.threatfabric.wordsperminute.foundation.coroutines.AppScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class WordsPerMinuteForGameStateHolder @Inject constructor(
-    @AppScope private val appScope: CoroutineScope,
-    private val gameKeystrokesStateFlowHolder: GameKeystrokesStateFlowHolder,
-    private val referenceTextHolder: ReferenceTextHolder
-) {
+object WordsPerMinuteCalculator {
 
-    private val mutableGameIdToWordsPerMinuteStateFlow =
-        MutableStateFlow<Pair<String?, Double>>(
-            null to 0.0
-        )
-    val gameIdToWordsPerMinuteStateFlow = mutableGameIdToWordsPerMinuteStateFlow.asStateFlow()
+    private const val PAUSE_THRESHOLD_MILLIS = 30_000L
+    private const val ONE_MINUTE_MILLIS = 60_000.0
 
-    init {
-        appScope.launch {
-            gameKeystrokesStateFlowHolder.gameIdToKeystrokesStateFlow.collect { (gameId, keystrokes) ->
-                mutableGameIdToWordsPerMinuteStateFlow.emit(gameId to calculateWordsPerMinute(gameId, keystrokes))
-            }
-        }
-    }
-
-    @VisibleForTesting
-    fun calculateWordsPerMinute(gameId: String?, keystrokes: List<Keystroke>): Double {
+    fun calculateWordsPerMinute(referenceText: String, keystrokes: List<Keystroke>): Double {
         val correctWords = calculateCorrectWords(
             typedText = keystrokes.toTypedStringWithoutErrors(),
-            referenceText = referenceTextHolder.getReferenceText(gameId ?: "")
+            referenceText = referenceText
         )
         val activeMillis = keystrokes.activeTypingDurationMillis()
         val minutes = activeMillis / ONE_MINUTE_MILLIS
@@ -80,11 +58,6 @@ class WordsPerMinuteForGameStateHolder @Inject constructor(
         }
 
         return activeTime
-    }
-
-    companion object {
-        private const val PAUSE_THRESHOLD_MILLIS = 30_000L
-        private const val ONE_MINUTE_MILLIS = 60_000.0
     }
 
 }

@@ -14,7 +14,7 @@ import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.Keystro
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.PhoneOrientation
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.GameKeystrokesStateFlowHolder
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.ReferenceTextHolder
-import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.WordsPerMinuteForGameStateHolder
+import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder.GameWordsPerMinuteStateHolder
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.usecase.SaveKeystrokeUseCase
 import com.theatfabric.wordsperminute.featurecomponent.keystroke.tracking.textfield.model.LoggedKeyEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,8 +32,8 @@ class GameScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val saveKeystrokeUseCase: SaveKeystrokeUseCase,
     private val gameKeystrokesStateFlowHolder: GameKeystrokesStateFlowHolder,
-    private val referenceTextHolder: ReferenceTextHolder,
-    private val wordsPerMinuteForGameStateHolder: WordsPerMinuteForGameStateHolder
+    referenceTextHolder: ReferenceTextHolder,
+    wordsPerMinuteForGameStateHolder: GameWordsPerMinuteStateHolder
 ) : ViewModel() {
 
     private val userName: String = checkNotNull(savedStateHandle["userName"])
@@ -49,15 +49,21 @@ class GameScreenViewModel @Inject constructor(
     )
     val referenceTextStateFlow = mutableReferenceTextStateFlow.asStateFlow()
 
-    val wordsPerMinuteStateFlow = wordsPerMinuteForGameStateHolder.gameIdToWordsPerMinuteStateFlow
+    val wordsPerMinuteStateFlow = wordsPerMinuteForGameStateHolder.gameWordsPerMinuteStateFlow
 
     init {
         viewModelScope.launch {
             mutableGameIsFinishedSharedFlow.emit(false)
             gameKeystrokesStateFlowHolder.startNewGame(gameId)
-            gameKeystrokesStateFlowHolder.gameIdToKeystrokesStateFlow.collect { (_, keystrokes) ->
+            gameKeystrokesStateFlowHolder.gameKeystrokesStateFlow.collect { (_, keystrokes) ->
                 processKeystrokes(keystrokes = keystrokes)
             }
+        }
+    }
+
+    fun resetGameFinishedDialog() {
+        viewModelScope.launch {
+            mutableGameIsFinishedSharedFlow.emit(false)
         }
     }
 

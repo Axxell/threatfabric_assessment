@@ -20,23 +20,28 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SoftwareKeyboardTrackingTextFieldViewModel @Inject constructor(
+class KeyboardTrackingTextFieldViewModel @Inject constructor(
     private val referenceTextHolder: ReferenceTextHolder
 ) : ViewModel() {
 
     private val mutableLoggedKeyEventFlow = MutableSharedFlow<LoggedKeyEvent>()
     val loggedKeyEventFlow = mutableLoggedKeyEventFlow.asSharedFlow()
 
-    private  val mutableTextFieldValueState = MutableStateFlow(TextFieldValue(""))
+    private val mutableTextFieldValueState = MutableStateFlow(TextFieldValue(""))
     val textFieldValueState = mutableTextFieldValueState.asStateFlow()
 
     var gameId by mutableStateOf("")
 
+    private val referenceText by lazy {
+        referenceTextHolder.getReferenceText(gameId)
+    }
+
     fun processEnteredText(enteredText: String) {
         val currentTime = System.currentTimeMillis()
-        val referenceText = referenceTextHolder.getReferenceText(gameId)
 
-        if (TextCorrectnessUtil.shouldAcceptTheNewText(enteredText, referenceText)) {
+        val oldText = mutableTextFieldValueState.value.text
+
+        if (TextCorrectnessUtil.shouldAcceptTheNewText(enteredText, oldText, referenceText)) {
             val typedChar = enteredText.last()
             val referenceChar = referenceText[enteredText.lastIndex]
             val isCorrect = TextCorrectnessUtil.isLastCharacterCorrect(

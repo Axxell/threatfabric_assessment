@@ -13,15 +13,15 @@ import com.theatfabric.wordsperminute.featurecomponent.keystroke.tracking.textfi
 import com.theatfabric.wordsperminute.featurecomponent.keystroke.tracking.textfield.model.LoggedKeyEvent
 
 @Composable
-fun SoftwareKeyboardTrackingTextField(
+fun KeyboardTrackingTextField(
     modifier: Modifier = Modifier,
+    viewModel: KeyboardTrackingTextFieldViewModel = hiltViewModel(),
     gameId: String,
-    viewModel: SoftwareKeyboardTrackingTextFieldViewModel = hiltViewModel(),
     onKeyLogged: (LoggedKeyEvent) -> Unit
 ) {
-
     LaunchedEffect(Unit) {
         viewModel.gameId = gameId
+
         viewModel.loggedKeyEventFlow.collect {
             onKeyLogged(it)
         }
@@ -29,6 +29,10 @@ fun SoftwareKeyboardTrackingTextField(
 
     val textFieldValueState by viewModel.textFieldValueState.collectAsStateWithLifecycle()
 
+    /*
+     It's still possible to paste into the TextField but only 1 char.
+     And it'll be processed normally so I see no issue here.
+     */
     TextField(
         value = textFieldValueState,
         label = { Text(text = stringResource(R.string.tracking_text_field_label)) },

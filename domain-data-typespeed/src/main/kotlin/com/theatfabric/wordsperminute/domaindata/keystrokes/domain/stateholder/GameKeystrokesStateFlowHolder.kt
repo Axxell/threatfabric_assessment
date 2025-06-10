@@ -1,6 +1,6 @@
 package com.theatfabric.wordsperminute.domaindata.keystrokes.domain.stateholder
 
-import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.Keystroke
+import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.GameKeystrokesState
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.repository.TypeSpeedRepository
 import com.threatfabric.wordsperminute.foundation.coroutines.AppScope
 import kotlinx.coroutines.CoroutineScope
@@ -15,11 +15,14 @@ class GameKeystrokesStateFlowHolder @Inject constructor(
     private val typeSpeedRepository: TypeSpeedRepository
 ) {
 
-    private val mutableGameIdToKeystrokesStateFlow =
-        MutableStateFlow<Pair<String?, List<Keystroke>>>(
-            null to emptyList()
+    private val mutableGameKeystrokesStateFlow =
+        MutableStateFlow(
+            GameKeystrokesState(
+                gameId = null,
+                keystrokes = emptyList()
+            )
         )
-    val gameIdToKeystrokesStateFlow = mutableGameIdToKeystrokesStateFlow.asStateFlow()
+    val gameKeystrokesStateFlow = mutableGameKeystrokesStateFlow.asStateFlow()
 
     private var currentJob: Job? = null
     private var currentGameId: String? = null
@@ -30,7 +33,12 @@ class GameKeystrokesStateFlowHolder @Inject constructor(
             currentJob?.cancel()
             currentJob = appScope.launch {
                 typeSpeedRepository.observeGameKeystrokes(gameId).collect {
-                    mutableGameIdToKeystrokesStateFlow.emit(gameId to it)
+                    mutableGameKeystrokesStateFlow.emit(
+                        GameKeystrokesState(
+                            gameId = gameId,
+                            keystrokes = it
+                        )
+                    )
                 }
             }
         }
