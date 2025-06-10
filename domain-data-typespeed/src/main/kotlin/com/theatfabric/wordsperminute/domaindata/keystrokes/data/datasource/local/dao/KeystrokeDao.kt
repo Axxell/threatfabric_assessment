@@ -12,16 +12,10 @@ internal interface KeystrokeDao {
     @Insert
     suspend fun addKeystroke(keystroke: KeystrokeDto)
 
-    @Query("SELECT * FROM keystrokes ORDER BY key_pressed ASC")
-    suspend fun getAll(): List<KeystrokeDto>
-
-    @Query("SELECT * FROM keystrokes ORDER BY key_pressed ASC")
-    fun observeAll(): Flow<List<KeystrokeDto>>
-
-    @Query("SELECT * FROM keystrokes WHERE game_id = :gameId ORDER BY key_pressed ASC")
+    @Query("SELECT * FROM keystrokes WHERE game_id = :gameId ORDER BY key_pressed_millis ASC")
     suspend fun getGameKeystrokes(gameId: String): List<KeystrokeDto>
 
-    @Query("SELECT * FROM keystrokes WHERE game_id = :gameId ORDER BY key_pressed ASC")
+    @Query("SELECT * FROM keystrokes WHERE game_id = :gameId ORDER BY key_pressed_millis ASC")
     fun observeGameKeystrokes(gameId: String): Flow<List<KeystrokeDto>>
 
     @Query("DELETE FROM keystrokes WHERE game_id = :gameId")

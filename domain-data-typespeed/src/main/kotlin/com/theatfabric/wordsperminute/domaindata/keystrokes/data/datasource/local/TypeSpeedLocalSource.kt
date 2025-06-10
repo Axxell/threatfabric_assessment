@@ -14,14 +14,6 @@ internal class TypeSpeedLocalSource @Inject constructor(
         keystrokeDao.addKeystroke(keystroke)
     }
 
-    override suspend fun getAllKeystrokes(): List<KeystrokeDto> {
-        return keystrokeDao.getAll()
-    }
-
-    override fun observeAllKeystrokes(): Flow<List<KeystrokeDto>> {
-        return keystrokeDao.observeAll()
-    }
-
     override suspend fun getGameKeystrokes(gameId: String): List<KeystrokeDto> {
         return keystrokeDao.getGameKeystrokes(gameId)
     }

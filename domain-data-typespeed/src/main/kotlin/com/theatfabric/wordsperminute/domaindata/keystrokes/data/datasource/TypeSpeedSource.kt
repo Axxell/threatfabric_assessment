@@ -7,10 +7,6 @@ internal interface TypeSpeedSource {
 
     suspend fun addKeystroke(keystroke: KeystrokeDto)
 
-    suspend fun getAllKeystrokes(): List<KeystrokeDto>
-
-    fun observeAllKeystrokes(): Flow<List<KeystrokeDto>>
-
     suspend fun getGameKeystrokes(gameId: String): List<KeystrokeDto>
 
     fun observeGameKeystrokes(gameId: String): Flow<List<KeystrokeDto>>

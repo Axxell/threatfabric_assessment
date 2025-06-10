@@ -22,6 +22,7 @@ dependencyResolutionManagement {
 rootProject.name = "WordsPerMinute"
 include(":app")
 include(":domain-data-typespeed")
+include(":feature-component-keystroke-tracking-textfield")
 include(":feature-component-wordsperminute")
 include(":feature-game-setup-screen")
 include(":feature-game-screen")

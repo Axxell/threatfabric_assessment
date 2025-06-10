@@ -17,14 +17,14 @@ class GameSetupScreenViewModel @Inject constructor() : ViewModel() {
     var userName by mutableStateOf("")
     var gameId by mutableStateOf("")
 
-    private val mutualNavigationFlow = MutableSharedFlow<String>()
-    val navigationFlow = mutualNavigationFlow.asSharedFlow()
+    private val mutableNavigationFlow = MutableSharedFlow<String>()
+    val navigationFlow = mutableNavigationFlow.asSharedFlow()
 
     fun onStartClicked() {
         if (userName.isNotBlank()) {
             gameId = UUID.randomUUID().toString()
             viewModelScope.launch {
-                mutualNavigationFlow.emit(userName)
+                mutableNavigationFlow.emit(userName)
             }
         }
     }

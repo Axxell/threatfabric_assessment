@@ -17,9 +17,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameScreen() {
-    val viewModel = hiltViewModel<GameScreenViewModel>()
-
+fun GameScreen(
+    viewModel: GameScreenViewModel = hiltViewModel()
+) {
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("WPM will be here") })
