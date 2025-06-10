@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="text_field_username_label">Username</string>
+    <string name="button_start_game_title">Start game</string>
+    <string name="game_setup_screen_title">TypeSpeed Game</string>
+</resources>

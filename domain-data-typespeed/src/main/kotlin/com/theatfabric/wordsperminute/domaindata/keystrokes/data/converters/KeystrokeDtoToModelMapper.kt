@@ -14,7 +14,6 @@ internal class KeystrokeDtoToModelMapper @Inject constructor() {
             keyReleasedMillis = dto.keyReleasedMillis,
             keyCode = dto.keyCode,
             isCorrect = dto.isCorrect,
-            isSeparator = dto.isSeparator,
             phoneOrientation = dto.phoneOrientation.toModel(),
             userName = dto.userName
         )

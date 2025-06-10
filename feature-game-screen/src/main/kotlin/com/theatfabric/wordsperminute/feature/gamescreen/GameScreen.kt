@@ -5,6 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.theatfabric.wordsperminute.feature.gamescreen.ui.GameScreenContent
@@ -27,16 +28,21 @@ fun GameScreen(
     if (gameIsFinished) {
         AlertDialog(
             onDismissRequest = { viewModel.resetGameFinishedDialog() },
-            title = { Text("Game Finished") },
+            title = { Text(stringResource(R.string.game_finished_title)) },
             text = {
-                Text("Your WPM is ${gameWordsPerMinuteState.wordsPerMinute}")
+                Text(
+                    stringResource(
+                        R.string.game_finished_text,
+                        gameWordsPerMinuteState.wordsPerMinute
+                    )
+                )
             },
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.resetGameFinishedDialog()
                     onGameFinished()
                 }) {
-                    Text("OK")
+                    Text(stringResource(R.string.text_ok))
                 }
             }
         )

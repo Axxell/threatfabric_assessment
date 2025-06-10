@@ -33,7 +33,6 @@ class GameKeystrokesStateFlowHolderTest {
             keyReleasedMillis = 200,
             keyCode = 65,
             isCorrect = true,
-            isSeparator = false,
             phoneOrientation = PhoneOrientation.PORTRAIT,
             userName = "tester"
         )

@@ -56,7 +56,6 @@ class TypeSpeedRepositoryImplTest {
             keyReleasedMillis = 150L,
             keyCode = 65,
             isCorrect = true,
-            isSeparator = false,
             phoneOrientation = PhoneOrientation.PORTRAIT,
             userName = "tester"
         )
@@ -66,7 +65,6 @@ class TypeSpeedRepositoryImplTest {
             keyReleasedMillis = 150L,
             keyCode = 65,
             isCorrect = true,
-            isSeparator = false,
             phoneOrientation = PhoneOrientationDto.PORTRAIT,
             userName = "tester"
         ).apply {
@@ -91,7 +89,6 @@ class TypeSpeedRepositoryImplTest {
                 keyReleasedMillis = 150L,
                 keyCode = 65,
                 isCorrect = true,
-                isSeparator = false,
                 phoneOrientation = PhoneOrientationDto.PORTRAIT,
                 userName = "tester"
             ).apply {
@@ -105,7 +102,6 @@ class TypeSpeedRepositoryImplTest {
                 keyReleasedMillis = 150L,
                 keyCode = 65,
                 isCorrect = true,
-                isSeparator = false,
                 phoneOrientation = PhoneOrientation.PORTRAIT,
                 userName = "tester"
             )
@@ -127,7 +123,6 @@ class TypeSpeedRepositoryImplTest {
             keyReleasedMillis = 200L,
             keyCode = 95,
             isCorrect = true,
-            isSeparator = false,
             phoneOrientation = PhoneOrientationDto.PORTRAIT,
             userName = "tester"
         ).apply {
@@ -139,7 +134,6 @@ class TypeSpeedRepositoryImplTest {
             keyReleasedMillis = 100L,
             keyCode = 65,
             isCorrect = true,
-            isSeparator = false,
             phoneOrientation = PhoneOrientationDto.PORTRAIT,
             userName = "tester"
         ).apply {
@@ -151,7 +145,6 @@ class TypeSpeedRepositoryImplTest {
             keyReleasedMillis = 200L,
             keyCode = 95,
             isCorrect = true,
-            isSeparator = false,
             phoneOrientation = PhoneOrientation.PORTRAIT,
             userName = "tester"
         )
@@ -161,7 +154,6 @@ class TypeSpeedRepositoryImplTest {
             keyReleasedMillis = 100L,
             keyCode = 65,
             isCorrect = true,
-            isSeparator = false,
             phoneOrientation = PhoneOrientation.PORTRAIT,
             userName = "tester"
         )

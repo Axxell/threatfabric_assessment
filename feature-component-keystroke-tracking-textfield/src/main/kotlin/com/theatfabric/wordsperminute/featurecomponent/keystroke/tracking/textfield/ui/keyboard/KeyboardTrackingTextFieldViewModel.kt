@@ -56,8 +56,7 @@ class KeyboardTrackingTextFieldViewModel @Inject constructor(
                         keyCode = typedChar.code,
                         keyPressedMillis = currentTime,
                         keyReleasedMillis = currentTime,
-                        isCorrect = isCorrect,
-                        isSeparator = referenceChar.isSeparator()
+                        isCorrect = isCorrect
                     )
                 )
             }

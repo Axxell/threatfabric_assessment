@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="game_finished_title">Game Finished</string>
-    <string name="game_finished_text">Your typing speed is %2f WPM.</string>
+    <string name="game_finished_text">Your typing speed is %1$.2f WPM.</string>
+    <string name="text_ok">OK</string>
+    <string name="game_screen_toolbar_title">WPM: %1$.2f</string>
 </resources>

@@ -6,7 +6,6 @@ data class Keystroke(
     val keyReleasedMillis: Long,
     val keyCode: Int,
     val isCorrect: Boolean,
-    val isSeparator: Boolean,
     val phoneOrientation: PhoneOrientation,
     val userName: String
 )

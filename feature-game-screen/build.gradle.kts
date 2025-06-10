@@ -14,5 +14,4 @@ android {
 dependencies {
     implementation(project(":domain-data-typespeed"))
     implementation(project(":feature-component-keystroke-tracking-textfield"))
-    implementation(project(":feature-component-wordsperminute"))
 }

@@ -104,7 +104,6 @@ class GameScreenViewModel @Inject constructor(
                     keyReleasedMillis = loggedKeyEvent.keyReleasedMillis,
                     keyCode = loggedKeyEvent.keyCode,
                     isCorrect = loggedKeyEvent.isCorrect,
-                    isSeparator = loggedKeyEvent.isSeparator,
                     phoneOrientation = context.phoneOrientation(),
                     userName = userName
                 )

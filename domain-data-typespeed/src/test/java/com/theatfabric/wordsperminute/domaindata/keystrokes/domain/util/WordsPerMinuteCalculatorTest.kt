@@ -4,98 +4,124 @@ import com.google.common.truth.Truth.assertThat
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.Keystroke
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.PhoneOrientation
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.util.WordsPerMinuteCalculator.activeTypingDurationMillis
-import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.util.WordsPerMinuteCalculator.toTypedStringWithoutErrors
 import org.junit.jupiter.api.Test
 
 class WordsPerMinuteCalculatorTest {
 
-    private val gameId = "game-123"
-    private val userName = "testUser"
-
-    private fun keystroke(
-        char: Char,
-        pressedAt: Long,
-        isCorrect: Boolean = true,
-        isSeparator: Boolean = false
+    private fun createKeystroke(
+        keyCode: Int,
+        isCorrect: Boolean,
+        millis: Long
     ): Keystroke {
+        val char = keyCode.toChar()
         return Keystroke(
-            gameId = gameId,
-            keyPressedMillis = pressedAt,
-            keyReleasedMillis = pressedAt + 100,
-            keyCode = char.code,
+            gameId = "game123",
+            keyPressedMillis = millis,
+            keyReleasedMillis = millis + 50,
+            keyCode = keyCode,
             isCorrect = isCorrect,
-            isSeparator = isSeparator,
             phoneOrientation = PhoneOrientation.PORTRAIT,
-            userName = userName
+            userName = "test"
         )
     }
 
     @Test
-    fun `toTypedStringWithoutErrors includes only correct characters and separators`() {
-        val list = listOf(
-            keystroke('h', 0, isCorrect = true),
-            keystroke('x', 100, isCorrect = false),
-            keystroke(' ', 200, isCorrect = false, isSeparator = true),
-            keystroke('w', 300, isCorrect = true)
+    fun `single correct word is counted`() {
+        val reference = "hello "
+        val keystrokes = listOf(
+            createKeystroke('h'.code, true, 0),
+            createKeystroke('e'.code, true, 100),
+            createKeystroke('l'.code, true, 200),
+            createKeystroke('l'.code, true, 300),
+            createKeystroke('o'.code, true, 400),
+            createKeystroke(' '.code, true, 500)
         )
 
-        val result = list.toTypedStringWithoutErrors()
-
-        assertThat(result).isEqualTo("h w")
+        val result = WordsPerMinuteCalculator.calculateCorrectWords(keystrokes, reference)
+        assertThat(result).isEqualTo(1)
     }
 
     @Test
-    fun `activeTypingDurationMillis returns total time excluding long pauses`() {
-        val list = listOf(
-            keystroke('h', 0),
-            keystroke('e', 1_000),
-            keystroke('l', 2_000),
-            keystroke('l', 32_000), // Long pause, excluded
-            keystroke('o', 33_000)
+    fun `word with one incorrect character is not counted`() {
+        val reference = "hello "
+        val keystrokes = listOf(
+            createKeystroke('h'.code, true, 0),
+            createKeystroke('e'.code, true, 100),
+            createKeystroke('x'.code, false, 200),
+            createKeystroke('l'.code, true, 300),
+            createKeystroke('o'.code, true, 400),
+            createKeystroke(' '.code, true, 500)
         )
 
-        val result = list.activeTypingDurationMillis()
-
-        assertThat(result).isEqualTo(2_000 + 1_000) // 3 seconds = 3000ms
+        val result = WordsPerMinuteCalculator.calculateCorrectWords(keystrokes, reference)
+        assertThat(result).isEqualTo(0)
     }
 
     @Test
-    fun `calculateCorrectWords counts exact matches only`() {
-        val typed = "hello world"
-        val reference = "hello world brave"
+    fun `multiple words with some incorrect are counted properly`() {
+        val reference = "hello world test "
+        val keystrokes = listOf(
+            // "hello"
+            createKeystroke('h'.code, true, 0),
+            createKeystroke('e'.code, true, 50),
+            createKeystroke('l'.code, true, 100),
+            createKeystroke('l'.code, true, 150),
+            createKeystroke('o'.code, true, 200),
+            createKeystroke(' '.code, true, 250),
 
-        val result = WordsPerMinuteCalculator.calculateCorrectWords(typed, reference)
+            // "world" (incorrect)
+            createKeystroke('w'.code, true, 400),
+            createKeystroke('o'.code, true, 450),
+            createKeystroke('x'.code, false, 500), // wrong
+            createKeystroke('l'.code, true, 550),
+            createKeystroke('d'.code, true, 600),
+            createKeystroke(' '.code, true, 650),
 
-        assertThat(result).isEqualTo(2) // "hello" and "world"
-    }
-
-    @Test
-    fun `calculateWordsPerMinute returns correct value for valid input`() {
-        val reference = "hello world"
-        val list = listOf(
-            keystroke('h', 0),
-            keystroke('e', 500),
-            keystroke('l', 1_000),
-            keystroke('l', 1_500),
-            keystroke('o', 2_000),
-            keystroke(' ', 2_500, isSeparator = true),
-            keystroke('w', 3_000),
-            keystroke('o', 3_500),
-            keystroke('r', 4_000),
-            keystroke('l', 4_500),
-            keystroke('d', 5_000)
+            // "test"
+            createKeystroke('t'.code, true, 800),
+            createKeystroke('e'.code, true, 850),
+            createKeystroke('s'.code, true, 900),
+            createKeystroke('t'.code, true, 950),
+            createKeystroke(' '.code, true, 1000)
         )
 
-        val wpm = WordsPerMinuteCalculator.calculateWordsPerMinute(reference, list)
-
-        // Total time = 5s = 0.0833 min, 2 correct words = ~24 WPM
-        assertThat(wpm).isWithin(0.1).of(24.0)
+        val result = WordsPerMinuteCalculator.calculateCorrectWords(keystrokes, reference)
+        assertThat(result).isEqualTo(2) // "hello" and "test"
     }
 
     @Test
-    fun `calculateWordsPerMinute returns 0 when no active time`() {
-        val result = WordsPerMinuteCalculator.calculateWordsPerMinute("hello", emptyList())
+    fun `active typing duration excludes large pauses`() {
+        val keystrokes = listOf(
+            createKeystroke('a'.code, true, 0),
+            createKeystroke('b'.code, true, 1000),
+            createKeystroke('c'.code, true, 3000),
+            createKeystroke('d'.code, true, 20000), // large pause (17s)
+            createKeystroke('e'.code, true, 20100)
+        )
 
-        assertThat(result).isEqualTo(0.0)
+        val duration = keystrokes.activeTypingDurationMillis()
+        assertThat(duration).isEqualTo(3100) // 1s + 2s, no 17s pause included
     }
+
+    @Test
+    fun `full WPM calculation with correct timing`() {
+        val reference = "hi there "
+        val keystrokes = listOf(
+            createKeystroke('h'.code, true, 0),
+            createKeystroke('i'.code, true, 500),
+            createKeystroke(' '.code, true, 1000),
+            createKeystroke('t'.code, true, 1500),
+            createKeystroke('h'.code, true, 2000),
+            createKeystroke('e'.code, true, 2500),
+            createKeystroke('r'.code, true, 3000),
+            createKeystroke('e'.code, true, 3500),
+            createKeystroke(' '.code, true, 4000)
+        )
+
+        val wpm = WordsPerMinuteCalculator.calculateWordsPerMinute(reference, keystrokes)
+
+        // 2 words over ~4 seconds = ~30 WPM
+        assertThat(wpm).isWithin(1.0).of(30.0)
+    }
+
 }

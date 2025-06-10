@@ -11,7 +11,6 @@ internal data class KeystrokeDto(
     @ColumnInfo(name = "key_released_millis") val keyReleasedMillis: Long,
     @ColumnInfo(name = "key_code") val keyCode: Int,
     @ColumnInfo(name = "is_correct") val isCorrect: Boolean,
-    @ColumnInfo(name = "is_separator") val isSeparator: Boolean,
     @ColumnInfo(name = "phone_orientation") val phoneOrientation: PhoneOrientationDto,
     @ColumnInfo(name = "user_name") val userName: String
 ) {

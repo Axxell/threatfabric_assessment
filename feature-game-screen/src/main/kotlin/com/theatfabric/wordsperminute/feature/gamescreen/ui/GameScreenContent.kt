@@ -12,12 +12,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.theatfabric.wordsperminute.feature.gamescreen.R
 import com.theatfabric.wordsperminute.featurecomponent.keystroke.tracking.textfield.model.LoggedKeyEvent
 import com.theatfabric.wordsperminute.featurecomponent.keystroke.tracking.textfield.ui.keyboard.KeyboardTrackingTextField
-import com.theatfabric.wordsperminute.featurecomponent.wordsperminute.WordsPerMinuteIndicator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +30,12 @@ fun GameScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(title = {
-                WordsPerMinuteIndicator(wordsPerMinute =  wordsPerMinute)
+                Text(
+                    text = stringResource(
+                        R.string.game_screen_toolbar_title,
+                        wordsPerMinute
+                    )
+                )
             })
         },
         content = { padding ->

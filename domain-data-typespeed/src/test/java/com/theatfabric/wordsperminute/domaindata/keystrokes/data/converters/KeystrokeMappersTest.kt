@@ -20,7 +20,6 @@ class KeystrokeMappersTest {
             keyReleasedMillis = 200L,
             keyCode = 65,
             isCorrect = true,
-            isSeparator = false,
             phoneOrientation = PhoneOrientationDto.PORTRAIT,
             userName = "Alice"
         )
@@ -32,7 +31,6 @@ class KeystrokeMappersTest {
         assertThat(model.keyReleasedMillis).isEqualTo(dto.keyReleasedMillis)
         assertThat(model.keyCode).isEqualTo(dto.keyCode)
         assertThat(model.isCorrect).isEqualTo(dto.isCorrect)
-        assertThat(model.isSeparator).isEqualTo(dto.isSeparator)
         assertThat(model.phoneOrientation).isEqualTo(PhoneOrientation.PORTRAIT)
         assertThat(model.userName).isEqualTo(dto.userName)
     }
@@ -45,7 +43,6 @@ class KeystrokeMappersTest {
             keyReleasedMillis = 400L,
             keyCode = 66,
             isCorrect = false,
-            isSeparator = true,
             phoneOrientation = PhoneOrientation.LANDSCAPE,
             userName = "Bob"
         )
@@ -57,7 +54,6 @@ class KeystrokeMappersTest {
         assertThat(dto.keyReleasedMillis).isEqualTo(model.keyReleasedMillis)
         assertThat(dto.keyCode).isEqualTo(model.keyCode)
         assertThat(dto.isCorrect).isEqualTo(model.isCorrect)
-        assertThat(dto.isSeparator).isEqualTo(model.isSeparator)
         assertThat(dto.phoneOrientation).isEqualTo(PhoneOrientationDto.LANDSCAPE)
         assertThat(dto.userName).isEqualTo(model.userName)
     }

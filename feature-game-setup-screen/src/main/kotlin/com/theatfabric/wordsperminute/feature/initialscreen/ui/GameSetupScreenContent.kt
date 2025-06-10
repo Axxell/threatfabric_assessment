@@ -14,8 +14,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.theatfabric.wordsperminute.feature.initialscreen.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,7 +29,7 @@ fun GameSetupScreenContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("TypeSpeed Game") }
+                title = { Text(stringResource(R.string.game_setup_screen_title)) }
             )
         },
         content = { padding ->
@@ -43,7 +45,7 @@ fun GameSetupScreenContent(
                         .fillMaxWidth(),
                     value = userName,
                     onValueChange = onUserNameChange,
-                    label = { Text("Username") }
+                    label = { Text(stringResource(R.string.text_field_username_label)) }
                 )
                 Button(
                     modifier = Modifier
@@ -51,7 +53,7 @@ fun GameSetupScreenContent(
                         .fillMaxWidth(),
                     onClick = onStartClicked
                 ) {
-                    Text("Start game")
+                    Text(stringResource(R.string.button_start_game_title))
                 }
             }
         }

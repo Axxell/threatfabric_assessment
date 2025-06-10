@@ -2,16 +2,16 @@ package com.theatfabric.wordsperminute.domaindata.keystrokes.domain.util
 
 import androidx.annotation.VisibleForTesting
 import com.theatfabric.wordsperminute.domaindata.keystrokes.domain.model.Keystroke
-import com.theatfabric.wordsperminute.foundation.strings.splitIntoWords
+import com.theatfabric.wordsperminute.foundation.strings.isSeparator
 
 object WordsPerMinuteCalculator {
 
-    private const val PAUSE_THRESHOLD_MILLIS = 30_000L
+    private const val PAUSE_THRESHOLD_MILLIS = 15_000L
     private const val ONE_MINUTE_MILLIS = 60_000.0
 
     fun calculateWordsPerMinute(referenceText: String, keystrokes: List<Keystroke>): Double {
         val correctWords = calculateCorrectWords(
-            typedText = keystrokes.toTypedStringWithoutErrors(),
+            keystrokes = keystrokes,
             referenceText = referenceText
         )
         val activeMillis = keystrokes.activeTypingDurationMillis()
@@ -20,23 +20,29 @@ object WordsPerMinuteCalculator {
     }
 
     @VisibleForTesting
-    fun List<Keystroke>.toTypedStringWithoutErrors(): String {
-        return this
-            .filter {
-                it.isCorrect || it.isSeparator
+    fun calculateCorrectWords(keystrokes: List<Keystroke>, referenceText: String): Int {
+        var wordsCount = 0
+        var isWordFailed = false
+        var word = ""
+        keystrokes.forEachIndexed { index, keystroke ->
+            val referenceChar = referenceText[index]
+
+            if (referenceChar.isSeparator()) {
+                if (!isWordFailed && word.isNotEmpty()) {
+                    wordsCount++
+                }
+                isWordFailed = false
+                word = ""
+            } else {
+                if (keystroke.isCorrect) {
+                    word += keystroke.keyCode.toChar()
+                } else {
+                    isWordFailed = true
+                }
             }
-            .map { if (it.isSeparator) " " else it.keyCode.toChar() }
-            .joinToString("")
-    }
-
-    @VisibleForTesting
-    fun calculateCorrectWords(typedText: String, referenceText: String): Int {
-        val typedWords = typedText.splitIntoWords()
-        val referenceWords = referenceText.splitIntoWords()
-
-        return typedWords.zip(referenceWords).count { (typed, reference) ->
-            typed == reference
         }
+
+        return wordsCount
     }
 
     @VisibleForTesting
